@@ -295,7 +295,7 @@ func renderPhishResponse(w http.ResponseWriter, r *http.Request, ptx models.Phis
 
 // RobotsHandler prevents search engines, etc. from indexing phishing materials
 func (ps *PhishingServer) RobotsHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintln(w, "User-agent: *\n\nDisallow: /home\nDisallow: /")
+	fmt.Fprintln(w, "User-agent: *\n\nDisallow: /")
 }
 
 // TransparencyHandler returns a TransparencyResponse for the provided result
@@ -382,23 +382,21 @@ func setupContext(r *http.Request) (*http.Request, error) {
 }
 
 
-// Auxiliary functions to evade phishing detections (based on edermi modifications)
+// Improved functions to help evade common signal sources for blue-team detection
 
 func customError(w http.ResponseWriter, error string, code int) {
-  w.Header().Set("Content-Type", "text/html; charset=utf-8")
+
+  w.Header().Set("Server", "nginx")
+  w.Header().Set("Content-Type", "text/html; charset=UTF-8")
+  w.Header().Set("Vary", "Accept-Encoding")
   w.Header().Set("X-Content-Type-Options", "nosniff")
   w.Header().Set("X-XSS-Protection", "1; mode=block")
-  w.Header().Set("Content-Security-Policy", "default-src https:")
-  w.Header().Set("X-Frame-Option", "SAMEORIGIN")
-  w.Header().Set("Server", "Microsoft-IIS/10.0")
-  w.Header().Set("cache-control", "max-age=0, private, must-revalidate")
-  w.Header().Set("content-encoding", "gzip")
+  w.Header().Set("X-Frame-Options", "SAMEORIGIN")
+
   w.WriteHeader(code)
   fmt.Fprintln(w, error)
 }
 
 func customNotFound(w http.ResponseWriter, r *http.Request) {
-  customError(w, "<html><body>Page doesn't exist, this is a custom <b>404</b> error message</body></html>", http.StatusNotFound)
+  customError(w, "<html lang=\"en\"><body><div style=\"position:absolute; top:50%; left:50%; transform:translateY(-50%, -50%);\"><b>404</b>, page not found.</div></body></html>", http.StatusNotFound)
 }
-
-
