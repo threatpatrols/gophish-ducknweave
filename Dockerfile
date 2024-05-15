@@ -23,7 +23,7 @@ FROM debian:stable-slim
 
 # Hello
 LABEL maintainer="Nicholas de Jong <ndejong@threatpatrols.com>"
-LABEL source="https://github.com/threatpatrols/docker-gophish-ducknweave"
+LABEL source="https://github.com/threatpatrols/gophish-ducknweave"
 
 RUN useradd -m -d /opt/gophish -s /bin/bash app
 
