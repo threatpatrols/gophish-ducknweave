@@ -1,3 +1,4 @@
+
 # Minify client side assets (JavaScript)
 FROM node:latest AS build-js
 
@@ -19,6 +20,10 @@ RUN go get -v && go build -v
 
 # Runtime container
 FROM debian:stable-slim
+
+# Hello
+LABEL maintainer="Nicholas de Jong <ndejong@threatpatrols.com>"
+LABEL source="https://github.com/threatpatrols/docker-gophish-ducknweave"
 
 RUN useradd -m -d /opt/gophish -s /bin/bash app
 
